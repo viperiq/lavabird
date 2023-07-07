@@ -13,14 +13,10 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-/**
- *
- * @author User
- */
 public class GamePanel extends JPanel {
     final int PANEL_WIDTH = 800;
-	final int PANEL_HEIGHT = 600;
-                
+    final int PANEL_HEIGHT = 600;
+
     private Bird bird;
     private ArrayList<Rectangle> rects;
     private FlappyBird fb;
@@ -35,49 +31,56 @@ public class GamePanel extends JPanel {
         this.rects = rects;
         scoreFont = new Font("Comic Sans MS", Font.BOLD, 18);
         pauseFont = new Font("Arial", Font.BOLD, 48);
-        
-        try {
-        	
-        	pipeLength = ImageIO.read(new File("C:\\Users\\Lenovo\\Documents\\NetBeansProjects\\JavaApplication24\\src\\images\\pipe_part.png"));
 
+        try {
+            // Load the image for the pipe
+            pipeLength = ImageIO.read(new File("C:\\Users\\Lenovo\\Documents\\NetBeansProjects\\JavaApplication24\\src\\images\\pipe_part.png"));
         }
         catch(IOException e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public void paintComponent(Graphics g) {
-        
-        g.fillRect(0,0,FlappyBird.WIDTH,FlappyBird.HEIGHT);
-         g.setColor(Color.BLACK);
-        
-                bird.update(g);
-                
+        // Fill the panel with the background color
+        g.fillRect(0, 0, FlappyBird.WIDTH, FlappyBird.HEIGHT);
+        g.setColor(Color.BLACK);
+
+        // Update and render the bird
+        bird.update(g);
+
         g.setColor(Color.RED);
         for(Rectangle r : rects) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setColor(Color.GREEN);
             //g2d.fillRect(r.x, r.y, r.width, r.height);
+
             AffineTransform old = g2d.getTransform();
-            g2d.translate(r.x+PIPE_W/2, r.y+PIPE_H/2);
-            if(r.y < FlappyBird.HEIGHT/2) {
+            g2d.translate(r.x + PIPE_W / 2, r.y + PIPE_H / 2);
+
+            // Rotate the pipe if it is above the screen midpoint
+            if(r.y < FlappyBird.HEIGHT / 2) {
                 g2d.translate(0, r.height);
                 g2d.rotate(Math.PI);
             }
-            
-           
-            g2d.drawImage(pipeLength, -PIPE_W/2, PIPE_H/2, GamePanel.PIPE_W, r.height, null);
+
+            // Draw the pipe image
+            g2d.drawImage(pipeLength, -PIPE_W / 2, PIPE_H / 2, GamePanel.PIPE_W, r.height, null);
             g2d.setTransform(old);
         }
+
+        // Render the player's score
         g.setFont(scoreFont);
         g.setColor(Color.BLACK);
-        g.drawString("Score: "+fb.getScore(), 10, 20);
-        
+        g.drawString("Score: " + fb.getScore(), 10, 20);
+
+        // Display the pause message if the game is paused
         if(fb.paused()) {
             g.setFont(pauseFont);
-            g.setColor(new Color(0,0,0,170));
-            g.drawString("PAUSED", FlappyBird.WIDTH/2-100, FlappyBird.HEIGHT/2-100);
-            g.drawString("PRESS SPACE TO BEGIN", FlappyBird.WIDTH/2-300, FlappyBird.HEIGHT/2+50);
+            g.setColor(new Color(0, 0, 0, 170));
+            g.drawString("PAUSED", FlappyBird.WIDTH / 2 - 100, FlappyBird.HEIGHT / 2 - 100);
+            g.drawString("PRESS SPACE TO BEGIN", FlappyBird.WIDTH / 2 - 300, FlappyBird.HEIGHT / 2 + 50);
         }
     }
 }
