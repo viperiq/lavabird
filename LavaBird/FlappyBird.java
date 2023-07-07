@@ -50,6 +50,7 @@ public class FlappyBird implements ActionListener, KeyListener {
         if(!paused) {
             bird.physics();
             if(scroll % 90 == 0) {
+                // Create two new rectangles for the pipes
                 Rectangle r = new Rectangle(WIDTH, 0, GamePanel.PIPE_W, (int) ((Math.random()*HEIGHT)/6f + (0.28f)*HEIGHT));
                 int h2 = (int) ((Math.random()*HEIGHT)/6f + (0.3f)*HEIGHT);
                 Rectangle r2 = new Rectangle(WIDTH, HEIGHT - h2, GamePanel.PIPE_W, h2);
@@ -59,24 +60,27 @@ public class FlappyBird implements ActionListener, KeyListener {
             ArrayList<Rectangle> toRemove = new ArrayList<Rectangle>();
             boolean game = true;
             for(Rectangle r : rects) {
-                r.x-=3;
-                if(r.contains(bird.x, bird.y)) {game = false;
+                r.x -= 3;
+                // Check if the bird collides with a pipe
+                if(r.contains(bird.x, bird.y)) {
+                    game = false;
                     toRemove.add(r);
                 }
                 if(r.contains(bird.x, bird.y)) {
-                    JOptionPane.showMessageDialog(frame, "You lose!\n"+"Your score was: "+time+".");
+                    JOptionPane.showMessageDialog(frame, "You lose!\n" + "Your score was: " + time + ".");
                     game = false;
                 }
-                
             }
             rects.removeAll(toRemove);
             time++;
             scroll++;
 
-            if(bird.y > 500 || bird.y+bird.RAD < 0) {
+            // Check if the bird is out of bounds
+            if(bird.y > 500 || bird.y + bird.RAD < 0) {
                 game = false;
             }
 
+            // If the game ends, reset the state
             if(!game) {
                 rects.clear();
                 bird.reset();
@@ -85,7 +89,6 @@ public class FlappyBird implements ActionListener, KeyListener {
                 paused = true;
             }
         }
-        
     }
     
     public int getScore() {
@@ -93,16 +96,17 @@ public class FlappyBird implements ActionListener, KeyListener {
     }
     
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode()==KeyEvent.VK_SPACE) {
+        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             bird.jump();
         }
-        
     }
+    
     public void keyReleased(KeyEvent e) {
-        if(e.getKeyCode()==KeyEvent.VK_SPACE) {
+        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             paused = false;
         }
     }
+    
     public void keyTyped(KeyEvent e) {
         
     }
