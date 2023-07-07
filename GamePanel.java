@@ -13,10 +13,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-/**
- *
- * @author User
- */
 public class GamePanel extends JPanel {
     final int PANEL_WIDTH = 800;
 	final int PANEL_HEIGHT = 600;
